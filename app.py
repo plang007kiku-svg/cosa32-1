@@ -1,7 +1,31 @@
 import streamlit as st
+import hmac
 import pandas as pd
 import plotly.express as px
 from datetime import datetime
+
+# ========== PASSWORD PROTECTION ==========
+def check_password():
+    """Returns True if user enters correct password"""
+    def password_entered():
+        if hmac.compare_digest(st.session_state["password"], st.secrets["password"]):
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]
+        else:
+            st.session_state["password_correct"] = False
+
+    if st.session_state.get("password_correct", False):
+        return True
+
+    st.text_input("🔐 Please enter password", type="password", on_change=password_entered, key="password")
+    if "password_correct" in st.session_state and not st.session_state["password_correct"]:
+        st.error("❌ Password is incorrect")
+    return False
+
+# Call this function before everything else
+if not check_password():
+    st.stop()
+# ==========================================
 
 # ตั้งค่า page
 st.set_page_config(
