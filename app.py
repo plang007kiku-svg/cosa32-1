@@ -8,7 +8,12 @@ from datetime import datetime
 def check_password():
     """Returns True if user enters correct password"""
     def password_entered():
-        if hmac.compare_digest(st.session_state["password"], st.secrets["password"]):
+        try:
+            password_correct = hmac.compare_digest(st.session_state["password"], st.secrets.get("password", "cosa3201"))
+        except KeyError:
+            password_correct = hmac.compare_digest(st.session_state["password"], "cosa3201")
+        
+        if password_correct:
             st.session_state["password_correct"] = True
             del st.session_state["password"]
         else:
