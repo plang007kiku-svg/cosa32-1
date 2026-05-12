@@ -1,6 +1,6 @@
 import streamlit as st
 import hmac
-import pandas as pd
+import pandas as pd  # Data manipulation and analysis library for handling threat intelligence datasets
 import plotly.express as px
 from datetime import datetime
 
